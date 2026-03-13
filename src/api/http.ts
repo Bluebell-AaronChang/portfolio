@@ -1,23 +1,34 @@
 import axios from 'axios'
-import type { AppError } from '@/types/error'
+import { track, untrack } from '@/lib/abortManager'
+import { parseError } from '@/lib/parseError'
 
 const http = axios.create({
   timeout: 15000,
 })
 
+http.interceptors.request.use((config) => {
+  const controller = new AbortController()
+    ; (controller.signal as AbortSignal & { _controller: AbortController })._controller = controller
+
+  config.signal = controller.signal
+
+  const key = config.url?.split('?')[0]
+  track(controller, key)
+
+  return config
+})
+
 http.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    const signal = response.config.signal as (AbortSignal & { _controller?: AbortController }) | undefined
+    if (signal?._controller) untrack(signal._controller)
+    return response
+  },
   (error) => {
-    const appError: AppError = {
-      code: error.response?.status?.toString() ?? 'NETWORK_ERROR',
-      message: error.response?.data?.message ?? error.message ?? '發生未知錯誤',
-      type: !error.response
-        ? 'network'
-        : error.response.status >= 400 && error.response.status < 500
-          ? 'validation'
-          : 'business',
-    }
-    return Promise.reject(appError)
+    const signal = error.config?.signal as (AbortSignal & { _controller?: AbortController }) | undefined
+    if (signal?._controller) untrack(signal._controller)
+
+    return Promise.reject(parseError(error))
   },
 )
 

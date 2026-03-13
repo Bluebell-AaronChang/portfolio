@@ -71,48 +71,33 @@ function formatDate(dateStr: string | null): string {
       <template v-else>
         <!-- Tag filter -->
         <div v-if="allTags.length > 0" class="mt-8 flex flex-wrap gap-2">
-          <button
-            class="px-3 py-1.5 text-sm rounded-md transition-colors cursor-pointer"
-            :class="!activeTag
-              ? 'bg-primary text-primary-foreground'
-              : 'bg-muted text-muted-foreground hover:text-foreground'"
-            @click="setTag(null)"
-          >
+          <button class="px-3 py-1.5 text-sm rounded-md transition-colors cursor-pointer" :class="!activeTag
+            ? 'bg-primary text-primary-foreground'
+            : 'bg-muted text-muted-foreground hover:text-foreground'" @click="setTag(null)">
             {{ t('notes-filter-all') }}
           </button>
-          <button
-            v-for="tag in allTags"
-            :key="tag"
-            class="px-3 py-1.5 text-sm rounded-md transition-colors cursor-pointer"
-            :class="activeTag === tag
+          <button v-for="tag in allTags" :key="tag"
+            class="px-3 py-1.5 text-sm rounded-md transition-colors cursor-pointer" :class="activeTag === tag
               ? 'bg-primary text-primary-foreground'
-              : 'bg-muted text-muted-foreground hover:text-foreground'"
-            @click="setTag(tag)"
-          >
+              : 'bg-muted text-muted-foreground hover:text-foreground'" @click="setTag(tag)">
             {{ tag }}
           </button>
         </div>
 
         <!-- Empty state -->
-        <div
-          v-if="filteredPosts.length === 0"
-          class="mt-10 text-center text-muted-foreground"
-        >
+        <div v-if="filteredPosts.length === 0" class="mt-10 text-center text-muted-foreground">
           {{ activeTag ? t('notes-empty-filter') : t('notes-empty') }}
         </div>
 
         <!-- Notes list -->
         <div class="mt-8 space-y-6">
-          <RouterLink
-            v-for="post in filteredPosts"
-            :key="post.id"
-            :to="{ name: 'NoteDetail', params: { slug: post.slug } }"
-            class="block group"
-          >
+          <RouterLink v-for="post in filteredPosts" :key="post.id"
+            :to="{ name: 'NoteDetail', params: { slug: post.slug } }" class="block group">
             <AppCard class="p-6 transition-shadow hover:shadow-md">
               <div class="flex items-start justify-between gap-4">
                 <div class="min-w-0 flex-1">
-                  <h2 class="text-lg font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-2">
+                  <h2
+                    class="text-lg font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-2">
                     {{ getNoteTitle(post, currentLocale) }}
                   </h2>
                   <p class="mt-2 text-sm text-muted-foreground line-clamp-3">
@@ -121,28 +106,17 @@ function formatDate(dateStr: string | null): string {
 
                   <div class="mt-4 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
                     <time v-if="post.published_at">{{ formatDate(post.published_at) }}</time>
-                    <span v-if="post.reading_time_minutes">·</span>
-                    <span v-if="post.reading_time_minutes">
-                      {{ t('notes-reading-time', { min: post.reading_time_minutes }) }}
-                    </span>
                   </div>
 
                   <div v-if="getNoteTags(post).length" class="mt-3 flex flex-wrap gap-1.5">
-                    <AppTag
-                      v-for="tag in getNoteTags(post)"
-                      :key="tag"
-                    >
+                    <AppTag v-for="tag in getNoteTags(post)" :key="tag">
                       {{ tag }}
                     </AppTag>
                   </div>
                 </div>
 
-                <img
-                  v-if="post.cover_image"
-                  :src="post.cover_image"
-                  :alt="getNoteTitle(post, currentLocale)"
-                  class="hidden sm:block w-32 h-24 rounded-md object-cover flex-shrink-0"
-                />
+                <img v-if="post.cover_image" :src="post.cover_image" :alt="getNoteTitle(post, currentLocale)"
+                  class="hidden sm:block w-32 h-24 rounded-md object-cover shrink-0" />
               </div>
             </AppCard>
           </RouterLink>

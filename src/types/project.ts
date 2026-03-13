@@ -7,11 +7,13 @@ export interface Project {
   contribution_zh: string
   contribution_en: string
   image?: string | null
-  tags: string[]
+  skill_ids: string[]
   github_url?: string | null
   live_url?: string | null
   status: 'active' | 'completed' | 'archived' | 'in-progress'
+  project_type: 'professional' | 'personal'
   featured: boolean
+  enabled: boolean
   order: number
   start_date?: string | null
   end_date?: string | null
@@ -21,22 +23,18 @@ export interface Project {
 
 export type ProjectLocale = 'zh-tw' | 'en'
 
-/** 依據 locale 取得專案名稱 */
 export function getProjectTitle(p: Project, locale: ProjectLocale): string {
   return locale === 'zh-tw' ? p.title_zh : p.title_en
 }
 
-/** 依據 locale 取得專案描述 */
 export function getProjectDescription(p: Project, locale: ProjectLocale): string {
   return locale === 'zh-tw' ? p.description_zh : p.description_en
 }
 
-/** 依據 locale 取得專案貢獻 */
 export function getProjectContribution(p: Project, locale: ProjectLocale): string {
   return locale === 'zh-tw' ? p.contribution_zh : p.contribution_en
 }
 
-/** 取得專案技術標籤 */
-export function getProjectTags(p: Project): string[] {
-  return p.tags ?? []
+export function getProjectSkillIds(p: Project): string[] {
+  return p.skill_ids ?? []
 }

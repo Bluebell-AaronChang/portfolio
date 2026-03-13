@@ -2,33 +2,19 @@
 import { computed } from 'vue'
 import { useWindowScroll } from '@vueuse/core'
 
-const { y: scrollY } = useWindowScroll()
+const { y: scrollY } = useWindowScroll({ behavior: 'smooth' })
 const isVisible = computed(() => scrollY.value > 400)
 
 function scrollToTop() {
-  window.scrollTo({ top: 0, behavior: 'smooth' })
+  scrollY.value = 0
 }
 </script>
 
 <template>
   <Transition name="scroll-top">
-    <button
-      v-if="isVisible"
-      class="scroll-top-btn"
-      aria-label="Scroll to top"
-      @click="scrollToTop"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      >
+    <button v-if="isVisible" class="scroll-top-btn" aria-label="Scroll to top" @click="scrollToTop">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <polyline points="18 15 12 9 6 15" />
       </svg>
     </button>
@@ -74,13 +60,14 @@ function scrollToTop() {
   box-shadow: 0 6px 20px rgba(255, 255, 255, 0.1);
 }
 
-/* Transition */
 .scroll-top-enter-active {
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
+
 .scroll-top-leave-active {
   transition: opacity 0.2s ease, transform 0.2s ease;
 }
+
 .scroll-top-enter-from,
 .scroll-top-leave-to {
   opacity: 0;

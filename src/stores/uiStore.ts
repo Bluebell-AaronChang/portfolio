@@ -1,20 +1,17 @@
 import { defineStore } from 'pinia'
-import { useDark } from '@vueuse/core'
+import { useColorMode } from '@vueuse/core'
 
 export const useUiStore = defineStore('ui', () => {
-  const isDarkMode = useDark({
+  const mode = useColorMode({
     selector: 'html',
     attribute: 'class',
-    valueDark: 'dark',
-    valueLight: '',
+    modes: {
+      light: '',
+      dark: 'dark',
+    },
   })
 
-  function setDarkMode(value: boolean) {
-    isDarkMode.value = value
-  }
-
   return {
-    isDarkMode,
-    setDarkMode,
+    mode,
   }
 })

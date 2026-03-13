@@ -1,20 +1,22 @@
-import { tryit } from 'radash'
+import { tryit } from 'radashi'
 import { supabase } from '@/api/supabase'
 import type { SiteConfig } from '@/types/siteConfig'
 
-export async function getSiteConfig<T = string>(key: string): Promise<T | null> {
+export interface GetSiteConfigOptions { signal?: AbortSignal }
+
+export async function getSiteConfig<T = string>(key: string, options?: GetSiteConfigOptions): Promise<T | null> {
   if (!supabase) return null
 
-  const client = supabase
-
   const [err, result] = await tryit(async () => {
-    const { data, error } = await client
+    let query = supabase!
       .from('site_config')
       .select('value')
       .eq('key', key)
-      .single()
 
-    if (error) throw { code: error.code, message: error.message, type: 'business' as const }
+    if (options?.signal) query = query.abortSignal(options.signal) as typeof query
+
+    const { data, error } = await query.single()
+    if (error) throw { code: error.code, message: error.message, hint: error.hint, details: error.details, type: 'business' as const }
     return (data as Pick<SiteConfig, 'value'>)?.value as T ?? null
   })()
 

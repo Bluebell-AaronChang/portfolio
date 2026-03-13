@@ -1,32 +1,39 @@
 <script setup lang="ts">
+import { ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import AppButton from '@/components/ui/AppButton.vue'
 import AppTag from '@/components/ui/AppTag.vue'
 import avatarImg from '@/assets/aaron_img.jpg'
-import { HERO_TECH_TAGS } from '@/data/skills'
+import { supabase } from '@/api/supabase'
 
 const { t } = useI18n()
+
+const heroTags = ref<string[]>([])
+
+onMounted(async () => {
+  try {
+    const { data } = await supabase!
+      .from('skills')
+      .select('name')
+      .eq('show_in_hero', true)
+      .order('order_index', { ascending: true })
+    heroTags.value = data?.map((s) => s.name) ?? []
+  } catch (err) {
+    console.error('Failed to load hero tags:', err)
+  }
+})
 </script>
 
 <template>
-  <section
-    id="home"
-    :aria-label="t('nav-home')"
-    class="relative flex min-h-screen items-center justify-center px-4 sm:px-6 lg:px-8"
-  >
+  <section id="home" :aria-label="t('nav-home')"
+    class="relative flex min-h-screen items-center justify-center px-4 sm:px-6 lg:px-8">
     <div
-      class="absolute inset-0 -z-10 bg-[linear-gradient(to_right,var(--color-border)_1px,transparent_1px),linear-gradient(to_bottom,var(--color-border)_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-30"
-    />
+      class="absolute inset-0 -z-10 bg-[linear-gradient(to_right,var(--color-border)_1px,transparent_1px),linear-gradient(to_bottom,var(--color-border)_1px,transparent_1px)]  bg-size-[4rem_4rem]  opacity-30" />
 
     <div class="mx-auto max-w-4xl text-center">
       <div class="mb-6 flex justify-center">
-        <img
-          :src="avatarImg"
-          :alt="t('hero-avatar-alt')"
-          width="112"
-          height="112"
-          class="h-28 w-28 rounded-full object-cover border-4 border-border shadow-lg animate-float"
-        />
+        <img :src="avatarImg" :alt="t('hero-avatar-alt')" width="112" height="112"
+          class="h-28 w-28 rounded-full object-cover border-4 border-border shadow-lg animate-float" />
       </div>
 
       <p class="mb-4 text-sm font-medium tracking-widest uppercase text-muted-foreground">
@@ -56,7 +63,7 @@ const { t } = useI18n()
       </div>
 
       <div class="mt-12 flex flex-wrap items-center justify-center gap-2">
-        <AppTag v-for="tag in HERO_TECH_TAGS" :key="tag" variant="outline">
+        <AppTag v-for="tag in heroTags" :key="tag" variant="outline">
           {{ tag }}
         </AppTag>
       </div>
@@ -70,9 +77,12 @@ const { t } = useI18n()
 }
 
 @keyframes float {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0);
   }
+
   50% {
     transform: translateY(-8px);
   }
