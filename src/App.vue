@@ -2,6 +2,7 @@
 import Navbar from '@/components/layout/Navbar.vue'
 import AppFooter from '@/components/layout/AppFooter.vue'
 import ToastContainer from '@/components/ui/ToastContainer.vue'
+import ScrollToTop from '@/components/ui/ScrollToTop.vue'
 </script>
 
 <template>
@@ -10,5 +11,6 @@ import ToastContainer from '@/components/ui/ToastContainer.vue'
     <RouterView />
     <AppFooter />
     <ToastContainer />
+    <ScrollToTop />
   </div>
 </template>

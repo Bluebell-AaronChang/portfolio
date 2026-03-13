@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useWindowScroll } from '@vueuse/core'
 import { useUiStore } from '@/stores/uiStore'
@@ -22,6 +22,63 @@ const NAV_KEYS = [
 const { y: scrollY } = useWindowScroll()
 const isScrolled = computed(() => scrollY.value > 20)
 const isMobileMenuOpen = ref(false)
+
+const activeSection = ref('home')
+let observer: IntersectionObserver | null = null
+const sectionIds = NAV_KEYS.map((n) => n.href.slice(1))
+
+function handleNavClick(href: string) {
+  const id = href.slice(1)
+  activeSection.value = id
+  history.replaceState(null, '', href)
+}
+
+onMounted(() => {
+  const sectionRatios = new Map<string, number>()
+
+  observer = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        sectionRatios.set(entry.target.id, entry.intersectionRatio)
+      }
+
+      let bestId = ''
+      let bestRatio = 0
+      for (const id of sectionIds) {
+        const ratio = sectionRatios.get(id) ?? 0
+        if (ratio > bestRatio) {
+          bestRatio = ratio
+          bestId = id
+        }
+      }
+
+      if (bestId && bestRatio > 0) {
+        activeSection.value = bestId
+        history.replaceState(null, '', `#${bestId}`)
+      }
+    },
+    {
+      // 多個 threshold 讓 observer 更頻繁回報比例變化
+      threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1],
+      rootMargin: '-64px 0px 0px 0px', // 只扣掉 navbar 高度
+    },
+  )
+
+  for (const id of sectionIds) {
+    const el = document.getElementById(id)
+    if (el) observer.observe(el)
+  }
+
+  // 初始化：依據目前 hash 設定 active
+  const hash = window.location.hash.slice(1)
+  if (hash && sectionIds.includes(hash)) {
+    activeSection.value = hash
+  }
+})
+
+onUnmounted(() => {
+  observer?.disconnect()
+})
 
 function toggleMobileMenu() {
   isMobileMenuOpen.value = !isMobileMenuOpen.value
@@ -59,7 +116,11 @@ const localeLabel = computed(() => (currentLocale.value === 'zh-tw' ? 'EN' : '�
             v-for="nav in NAV_KEYS"
             :key="nav.href"
             :href="nav.href"
-            class="px-3 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors rounded-md hover:bg-accent"
+            class="px-3 py-2 text-sm transition-colors rounded-md"
+            :class="activeSection === nav.href.slice(1)
+              ? 'text-foreground font-semibold bg-accent'
+              : 'text-muted-foreground hover:text-foreground hover:bg-accent'"
+            @click="handleNavClick(nav.href)"
           >
             {{ t(nav.key) }}
           </a>
@@ -119,8 +180,11 @@ const localeLabel = computed(() => (currentLocale.value === 'zh-tw' ? 'EN' : '�
             v-for="nav in NAV_KEYS"
             :key="nav.href"
             :href="nav.href"
-            class="block px-3 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors rounded-md hover:bg-accent"
-            @click="closeMobileMenu"
+            class="block px-3 py-2 text-sm transition-colors rounded-md"
+            :class="activeSection === nav.href.slice(1)
+              ? 'text-foreground font-semibold bg-accent'
+              : 'text-muted-foreground hover:text-foreground hover:bg-accent'"
+            @click="handleNavClick(nav.href); closeMobileMenu()"
           >
             {{ t(nav.key) }}
           </a>
