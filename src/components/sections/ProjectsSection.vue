@@ -6,8 +6,11 @@ import AppCard from '@/components/ui/AppCard.vue'
 import AppTag from '@/components/ui/AppTag.vue'
 import { useProjectsQuery } from '@/queries/projectQueries'
 import { getAllCategories, getTechCategory } from '@/data/techCategories'
+import { getProjectTags, getProjectTitle, getProjectDescription, getProjectContribution } from '@/types/project'
+import type { ProjectLocale } from '@/types/project'
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
+const currentLocale = computed(() => locale.value as ProjectLocale)
 const { data: projects, isLoading, isError } = useProjectsQuery()
 
 const categories = getAllCategories()
@@ -33,7 +36,7 @@ const filteredProjects = computed(() => {
   if (!projects.value) return []
   if (activeFilter.value === 'All') return projects.value
   return projects.value.filter((p) =>
-    p.tech_stack.some((tech) => getTechCategory(tech) === activeFilter.value),
+    getProjectTags(p).some((tech) => getTechCategory(tech) === activeFilter.value),
   )
 })
 
@@ -107,7 +110,7 @@ function onMouseLeave(e: MouseEvent) {
           <span
             v-if="cat !== 'All'"
             class="ml-1 text-[10px] opacity-60"
-          >({{ projects ? projects.filter(p => p.tech_stack.some(tech => getTechCategory(tech) === cat)).length : 0 }})</span>
+          >({{ projects ? projects.filter(p => getProjectTags(p).some(tech => getTechCategory(tech) === cat)).length : 0 }})</span>
         </button>
       </div>
 
@@ -154,7 +157,7 @@ function onMouseLeave(e: MouseEvent) {
             <!-- Header -->
             <div class="flex items-start justify-between mb-2">
               <h3 class="text-lg font-semibold leading-snug pr-2">
-                {{ project.i18n_key ? t(`${project.i18n_key}-name`) : project.name }}
+                {{ getProjectTitle(project, currentLocale) }}
               </h3>
               <svg
                 class="shrink-0 w-4 h-4 mt-1 text-muted-foreground transition-transform duration-300"
@@ -171,7 +174,7 @@ function onMouseLeave(e: MouseEvent) {
               class="text-sm text-muted-foreground mb-4"
               :class="expandedId === project.id ? '' : 'line-clamp-3'"
             >
-              {{ project.i18n_key ? t(`${project.i18n_key}-desc`) : project.description }}
+              {{ getProjectDescription(project, currentLocale) }}
             </p>
 
             <!-- Expanded: Contribution -->
@@ -181,7 +184,7 @@ function onMouseLeave(e: MouseEvent) {
                   {{ t('projects-contribution-label') }}
                 </p>
                 <p class="text-sm text-muted-foreground">
-                  {{ project.i18n_key ? t(`${project.i18n_key}-contribution`) : project.contribution }}
+                  {{ getProjectContribution(project, currentLocale) }}
                 </p>
               </div>
             </Transition>
@@ -189,7 +192,7 @@ function onMouseLeave(e: MouseEvent) {
             <!-- Tech tags -->
             <div class="flex flex-wrap gap-1.5 mt-auto pt-4 border-t border-border">
               <AppTag
-                v-for="tech in project.tech_stack"
+                v-for="tech in getProjectTags(project)"
                 :key="tech"
                 variant="outline"
                 :class="activeFilter !== 'All' && getTechCategory(tech) === activeFilter

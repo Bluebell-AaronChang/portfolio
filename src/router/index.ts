@@ -7,6 +7,17 @@ const routes: RouteRecordRaw[] = [
     name: 'Home',
     component: () => import('@/pages/HomePage.vue'),
   },
+  {
+    path: '/notes',
+    name: 'Notes',
+    component: () => import('@/pages/NotesPage.vue'),
+  },
+  {
+    path: '/notes/:slug',
+    name: 'NoteDetail',
+    component: () => import('@/pages/NoteDetailPage.vue'),
+    props: true,
+  },
 ]
 
 const router = createRouter({

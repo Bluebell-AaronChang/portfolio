@@ -1,55 +1,46 @@
 import { tryit } from 'radash'
 import { supabase } from '@/api/supabase'
-import { STATIC_PROJECTS } from '@/data/projects'
 import type { Project } from '@/types/project'
 
 export interface GetProjectsOptions {
   signal?: AbortSignal
 }
 
-interface ProjectDataSource {
-  getAll(options?: GetProjectsOptions): Promise<Project[]>
-}
-
-const localDataSource: ProjectDataSource = {
-  async getAll() {
-    return STATIC_PROJECTS
-  },
-}
-
-const remoteDataSource: ProjectDataSource = {
-  async getAll(options?: GetProjectsOptions) {
-    if (!supabase) throw new Error('[ProjectService] Supabase client not initialized')
-
-    const query = supabase
-      .from('projects')
-      .select('*')
-      .order('order', { ascending: true })
-
-    if (options?.signal) {
-      query.abortSignal(options.signal)
-    }
-
-    const { data, error } = await query
-    if (error) throw { code: error.code, message: error.message, type: 'business' as const }
-    return (data as Project[]) ?? []
-  },
-}
-
-const useRemote = import.meta.env.VITE_USE_REMOTE_PROJECTS === 'true' && !!supabase
-
-const primarySource: ProjectDataSource = useRemote ? remoteDataSource : localDataSource
+const PROJECTS_SELECT = [
+  'id',
+  'title_zh', 'title_en',
+  'description_zh', 'description_en',
+  'contribution_zh', 'contribution_en',
+  'image', 'tags',
+  'github_url', 'live_url',
+  'status', 'featured',
+  '"order"',
+  'start_date', 'end_date',
+  'created_at', 'updated_at',
+].join(', ')
 
 export async function getProjects(options?: GetProjectsOptions): Promise<Project[]> {
-  const [err, data] = await tryit(primarySource.getAll.bind(primarySource))(options)
+  if (!supabase) throw new Error('[ProjectService] Supabase client not initialized')
+
+  const query = supabase
+    .from('projects')
+    .select(PROJECTS_SELECT)
+    .order('order', { ascending: true })
+
+  if (options?.signal) {
+    query.abortSignal(options.signal)
+  }
+
+  const [err, result] = await tryit(async () => {
+    const { data, error } = await query
+    if (error) throw { code: error.code, message: error.message, type: 'business' as const }
+    return (data as unknown as Project[]) ?? []
+  })()
 
   if (err) {
-    if (useRemote) {
-      console.warn('[ProjectService] Remote fetch failed, falling back to local data:', err)
-      return localDataSource.getAll()
-    }
+    console.error('[ProjectService] Failed to fetch projects:', err)
     throw err
   }
 
-  return data
+  return result
 }

@@ -1,16 +1,19 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useRoute, RouterLink } from 'vue-router'
 import { useWindowScroll } from '@vueuse/core'
 import { useUiStore } from '@/stores/uiStore'
 import { useLocale } from '@/composables/useLocale'
 import AppButton from '@/components/ui/AppButton.vue'
 
 const { t } = useI18n()
+const route = useRoute()
 const uiStore = useUiStore()
 const { currentLocale, toggleLocale } = useLocale()
 
-const NAV_KEYS = [
+/** Hash-based nav items (首頁各 section) */
+const SECTION_NAV_KEYS = [
   { key: 'nav-home', href: '#home' },
   { key: 'nav-about', href: '#about' },
   { key: 'nav-projects', href: '#projects' },
@@ -19,12 +22,19 @@ const NAV_KEYS = [
   { key: 'nav-contact', href: '#contact' },
 ]
 
+/** Route-based nav items (獨立頁面) */
+const ROUTE_NAV_KEYS = [
+  { key: 'nav-notes', to: '/notes' },
+]
+
+const isHomePage = computed(() => route.path === '/')
+
 const { y: scrollY } = useWindowScroll()
 const isScrolled = computed(() => scrollY.value > 20)
 const isMobileMenuOpen = ref(false)
 
 const activeSection = ref('home')
-const sectionIds = NAV_KEYS.map((n) => n.href.slice(1))
+const sectionIds = SECTION_NAV_KEYS.map((n) => n.href.slice(1))
 
 function handleNavClick(href: string) {
   const id = href.slice(1)
@@ -33,6 +43,8 @@ function handleNavClick(href: string) {
 }
 
 function updateActiveByScroll() {
+  if (!isHomePage.value) return
+
   const offset = 100
 
   const atBottom = Math.abs(
@@ -65,6 +77,7 @@ function updateActiveByScroll() {
 watch(scrollY, updateActiveByScroll)
 
 onMounted(() => {
+  if (!isHomePage.value) return
   const hash = window.location.hash.slice(1)
   if (hash && sectionIds.includes(hash)) {
     activeSection.value = hash
@@ -100,23 +113,44 @@ const localeLabel = computed(() => (currentLocale.value === 'zh-tw' ? 'EN' : '�
   >
     <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
       <div class="flex h-16 items-center justify-between">
-        <a href="#home" class="text-lg font-bold tracking-tight hover:opacity-80 transition-opacity">
+        <RouterLink to="/" class="text-lg font-bold tracking-tight hover:opacity-80 transition-opacity">
           Aaron Chang
-        </a>
+        </RouterLink>
 
         <div class="hidden md:flex items-center gap-1">
-          <a
-            v-for="nav in NAV_KEYS"
-            :key="nav.href"
-            :href="nav.href"
+          <template v-if="isHomePage">
+            <a
+              v-for="nav in SECTION_NAV_KEYS"
+              :key="nav.href"
+              :href="nav.href"
+              class="px-3 py-2 text-sm transition-colors rounded-md"
+              :class="activeSection === nav.href.slice(1)
+                ? 'text-foreground font-semibold bg-accent'
+                : 'text-muted-foreground hover:text-foreground hover:bg-accent'"
+              @click="handleNavClick(nav.href)"
+            >
+              {{ t(nav.key) }}
+            </a>
+          </template>
+          <template v-else>
+            <RouterLink
+              to="/"
+              class="px-3 py-2 text-sm transition-colors rounded-md text-muted-foreground hover:text-foreground hover:bg-accent"
+            >
+              {{ t('nav-home') }}
+            </RouterLink>
+          </template>
+          <RouterLink
+            v-for="nav in ROUTE_NAV_KEYS"
+            :key="nav.to"
+            :to="nav.to"
             class="px-3 py-2 text-sm transition-colors rounded-md"
-            :class="activeSection === nav.href.slice(1)
+            :class="route.path.startsWith(nav.to)
               ? 'text-foreground font-semibold bg-accent'
               : 'text-muted-foreground hover:text-foreground hover:bg-accent'"
-            @click="handleNavClick(nav.href)"
           >
             {{ t(nav.key) }}
-          </a>
+          </RouterLink>
           <button
             class="ml-3 p-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors rounded-md hover:bg-accent cursor-pointer"
             :aria-label="t('nav-toggle-locale')"
@@ -169,18 +203,41 @@ const localeLabel = computed(() => (currentLocale.value === 'zh-tw' ? 'EN' : '�
         class="md:hidden border-t border-border bg-background/95 backdrop-blur-md"
       >
         <div class="px-4 py-4 space-y-1">
-          <a
-            v-for="nav in NAV_KEYS"
-            :key="nav.href"
-            :href="nav.href"
+          <template v-if="isHomePage">
+            <a
+              v-for="nav in SECTION_NAV_KEYS"
+              :key="nav.href"
+              :href="nav.href"
+              class="block px-3 py-2 text-sm transition-colors rounded-md"
+              :class="activeSection === nav.href.slice(1)
+                ? 'text-foreground font-semibold bg-accent'
+                : 'text-muted-foreground hover:text-foreground hover:bg-accent'"
+              @click="handleNavClick(nav.href); closeMobileMenu()"
+            >
+              {{ t(nav.key) }}
+            </a>
+          </template>
+          <template v-else>
+            <RouterLink
+              to="/"
+              class="block px-3 py-2 text-sm transition-colors rounded-md text-muted-foreground hover:text-foreground hover:bg-accent"
+              @click="closeMobileMenu()"
+            >
+              {{ t('nav-home') }}
+            </RouterLink>
+          </template>
+          <RouterLink
+            v-for="nav in ROUTE_NAV_KEYS"
+            :key="nav.to"
+            :to="nav.to"
             class="block px-3 py-2 text-sm transition-colors rounded-md"
-            :class="activeSection === nav.href.slice(1)
+            :class="route.path.startsWith(nav.to)
               ? 'text-foreground font-semibold bg-accent'
               : 'text-muted-foreground hover:text-foreground hover:bg-accent'"
-            @click="handleNavClick(nav.href); closeMobileMenu()"
+            @click="closeMobileMenu()"
           >
             {{ t(nav.key) }}
-          </a>
+          </RouterLink>
         </div>
       </div>
     </Transition>

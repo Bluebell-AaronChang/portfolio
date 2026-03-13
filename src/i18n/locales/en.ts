@@ -52,69 +52,6 @@ export default {
   'projects-filter-cloud--api': 'Cloud & API',
   'projects-filter-iot': 'IoT',
 
-  'project-global-pos-name': 'Global POS System',
-  'project-global-pos-desc': 'A unified global POS sales platform supporting multi-brand, multi-market, and multi-currency operations, covering sales, transactions, and accounting features.',
-  'project-global-pos-contribution': 'Responsible for core module design and long-term maintenance, planning maintainable and extensible system architecture, improving system stability and reducing technical debt.',
-  'project-wms-name': 'WMS — Retail Warehouse Management System',
-  'project-wms-desc': 'Retail warehouse management system covering inbound/outbound management, real-time inventory tracking, stocktaking processes, and multi-ecommerce platform integration.',
-  'project-wms-contribution': 'Developed warehouse process features, designed backend services and optimized database query performance.',
-
-  'project-tailtales-name': 'Pet Health Management App',
-  'project-tailtales-desc': 'A pet health management system designed for modern pet owners. Featuring "Warm Minimalism" design, it provides seamless multi-pet management, health records, and a smooth cross-step form experience with dynamic routing.',
-  'project-tailtales-contribution': 'Independently responsible for full-stack architecture and UI/UX implementation. Used Riverpod for complex cross-page form state management with GoRouter Auth Guard route interception on the frontend; designed a normalized database with Supabase (PostgreSQL) and strict RLS (Row Level Security) for multi-user data isolation and security on the backend.',
-
-  'project-personal-cfo-name': 'Personal CFO — Cash Flow Navigation System',
-  'project-personal-cfo-desc': 'An enterprise-grade personal finance platform that moves beyond traditional bookkeeping, featuring cash flow forecasting, automated installment amortization, and dynamic budget management. Includes a historical data migration engine for painless import from mainstream budgeting apps.',
-  'project-personal-cfo-contribution': 'Independently designed and developed the full-stack architecture, covering double-entry bookkeeping data model design, recurring auto-billing engine, credit card cross-month billing routing, 30-day cash flow forecast curves, and an ETL historical data import wizard.',
-
-  'project-mdm-name': 'Master Data Management System',
-  'project-mdm-desc': 'Internal master data system ensuring cross-module data consistency with multi-brand architecture support, providing a reliable data foundation for core business processes.',
-  'project-mdm-contribution': 'Participated in core process design and maintenance, ensuring data integrity and cross-system consistency.',
-  'project-digital-card-name': 'Digital Card — Google & Apple Wallet',
-  'project-digital-card-desc': 'Digital card issuance system, building and maintaining Google Wallet / Apple Wallet card issuance mechanisms to enhance member digital experience.',
-  'project-digital-card-contribution': 'Built the complete card issuance flow, handling third-party API integration and exception handling.',
-  'project-ecommerce-name': 'E‑Commerce Platform Integration',
-  'project-ecommerce-desc': 'Integrated Shopify, Bloomreach and other e-commerce platforms, implementing data synchronization processes to ensure multi-platform data consistency.',
-  'project-ecommerce-contribution': 'Implemented data synchronization processes, ensuring stable and accurate data sync with future extensibility.',
-  'project-supplier-name': 'Supplier Evaluation & Audit System',
-  'project-supplier-desc': 'Supplier evaluation and internal audit workflow system, establishing multi-dimensional evaluation mechanisms and digitalizing audit operations.',
-  'project-supplier-contribution': 'Responsible for frontend implementation, supporting form customization, approval workflow control, and progress tracking.',
-  'project-barcode-name': 'Barcode Verification App',
-  'project-barcode-desc': 'Incoming material barcode verification application, improving material feeding and receiving accuracy, reducing error rate from ~15% to 1%.',
-  'project-barcode-contribution': 'Independently developed the entire system, significantly reducing manual errors and operation time.',
-
-  'project-chrome-extension-name': 'Internal Project Management Chrome Extension',
-  'project-chrome-extension-desc': 'Developed an internal project management Chrome Extension using WXT (Next-gen Web Extension Framework) with Vue 3 + Strapi, improving team productivity.',
-  'project-chrome-extension-contribution': 'Responsible for overall architecture design and development, integrating Strapi backend API for real-time project status tracking and management.',
-
-  'project-interview-platform-name': 'Interview Management Platform',
-  'project-interview-platform-desc': 'Interview management platform integrating candidate data management and interview process digitization to improve recruitment efficiency.',
-  'project-interview-platform-contribution': 'Built the interview management platform, integrating candidate data management and digitalizing the interview workflow for recruitment process transformation.',
-
-  'project-wms-inventory-name': 'WMS — Semiconductor Warehouse Management System',
-  'project-wms-inventory-desc': 'Semiconductor industry warehouse management system covering inbound/outbound management, real-time inventory tracking, and stocktaking processes.',
-  'project-wms-inventory-contribution': 'Responsible for full-stack development of the warehouse management system, implementing inbound/outbound management, real-time inventory tracking, and stocktaking features.',
-
-  'project-email-scheduler-name': 'Automated Email Scheduling System',
-  'project-email-scheduler-desc': 'Automated email scheduling system supporting scheduled delivery and conditional triggers, reducing manual operations and improving notification efficiency.',
-  'project-email-scheduler-contribution': 'Independently developed the automated email scheduling system, implementing scheduled delivery and conditional trigger mechanisms, significantly reducing manual operation costs.',
-
-  'project-worktime-bot-name': 'Work-hour Reminder Bot (Synology Chat)',
-  'project-worktime-bot-desc': 'Work-hour reminder bot integrated with Synology Chat, improving internal work-hour management processes.',
-  'project-worktime-bot-contribution': 'Developed the work-hour reminder bot, delivering real-time push notifications via Synology Chat to improve work-hour reporting efficiency and compliance.',
-
-  'project-face-recognition-name': 'Real-time Face Recognition Display System',
-  'project-face-recognition-desc': 'Built a real-time face recognition result display system using WebSocket technology, integrated with a third-party face recognition platform.',
-  'project-face-recognition-contribution': 'Implemented WebSocket real-time communication architecture, integrating a third-party face recognition platform for instant recognition result display.',
-
-  'project-news-dashboard-name': 'News Industry Traffic Dashboard',
-  'project-news-dashboard-desc': 'Internal traffic analysis war room for the news industry, providing real-time traffic monitoring and data visualization.',
-  'project-news-dashboard-contribution': 'Responsible for frontend development, implementing real-time traffic data visualization and war room interface design.',
-
-  'project-waste-management-name': 'Manufacturing Waste Management System',
-  'project-waste-management-desc': 'Manufacturing waste management system including backend integration with cabinet door alarms and frontend management interface development.',
-  'project-waste-management-contribution': 'Responsible for backend cabinet door alarm system integration and frontend management interface development, digitalizing the waste management workflow.',
-
   'skills-title': 'Skills',
   'skills-subtitle': 'Technologies and tools I work with.',
   'skills-backend': 'Backend',
@@ -157,4 +94,20 @@ export default {
   'github-time-days': '{count}d ago',
 
   'error-unknown': 'An unknown error occurred',
+
+  'nav-notes': 'Notes',
+
+  'notes-title': 'Notes',
+  'notes-subtitle': 'Thoughts on software engineering, architecture, and development practices.',
+  'notes-error': 'Unable to load notes. Please try again later.',
+  'notes-empty': 'No notes yet. Stay tuned!',
+  'notes-empty-filter': 'No notes match the selected filter.',
+  'notes-filter-all': 'All',
+  'notes-read-more': 'Read more',
+  'notes-back': 'Back to Notes',
+  'notes-reading-time': '{min} min read',
+  'notes-published-at': 'Published on {date}',
+  'notes-share': 'Share',
+  'notes-copy-link': 'Copy link',
+  'notes-link-copied': 'Link copied!',
 }
