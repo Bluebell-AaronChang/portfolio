@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import GitHubActivity from '@/components/ui/GitHubActivity.vue'
+import SiteUptime from '@/components/ui/SiteUptime.vue'
 
 const { t, locale } = useI18n()
 const currentYear = new Date().getFullYear()
@@ -22,7 +24,12 @@ const lastUpdated = computed(() => {
 <template>
   <footer role="contentinfo" class="border-t border-border bg-muted/30">
     <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8">
-      <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+      <!-- GitHub Activity -->
+      <div class="mb-6">
+        <GitHubActivity />
+      </div>
+
+      <div class="border-t border-border/50 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
         <div class="flex flex-col items-center sm:items-start gap-1">
           <p class="text-sm text-muted-foreground">
             {{ t('footer-rights', { year: currentYear }) }}
@@ -30,6 +37,7 @@ const lastUpdated = computed(() => {
           <p class="text-xs text-muted-foreground/60">
             {{ t('footer-last-updated', { time: lastUpdated }) }}
           </p>
+          <SiteUptime />
         </div>
         <div class="flex items-center gap-4">
           <a

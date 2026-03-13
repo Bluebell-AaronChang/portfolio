@@ -1,3 +1,5 @@
+import { select } from 'radash'
+
 export interface SkillCategoryDef {
   titleKey: string
   icon: string
@@ -61,5 +63,9 @@ export const SKILL_DEFS: SkillCategoryDef[] = [
 ]
 
 export const HERO_TECH_TAGS: string[] = SKILL_DEFS.flatMap((cat) =>
-  cat.skills.filter((s) => s.hero).map((s) => s.label),
+  select(
+    cat.skills,
+    (s) => s.label,
+    (s) => !!s.hero,
+  ),
 )

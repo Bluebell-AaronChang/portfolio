@@ -145,6 +145,16 @@ export default {
   'footer-rights': '© {year} Aaron Chang. 保留所有權利。',
   'footer-github-label': 'GitHub',
   'footer-last-updated': '最後更新於 {time}',
+  'footer-uptime': '已上線 {days} 天 {hours} 時 {minutes} 分 {seconds} 秒',
+
+  'github-activity-title': '近期動態',
+  'github-activity-error': '無法載入 GitHub 活動。',
+  'github-activity-empty': '暫無近期活動。',
+  'github-pushed': '推送於',
+  'github-time-just-now': '剛剛',
+  'github-time-minutes': '{count} 分鐘前',
+  'github-time-hours': '{count} 小時前',
+  'github-time-days': '{count} 天前',
 
   'error-unknown': '發生未知錯誤',
 }

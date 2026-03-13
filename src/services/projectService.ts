@@ -1,3 +1,4 @@
+import { tryit } from 'radash'
 import { supabase } from '@/api/supabase'
 import { STATIC_PROJECTS } from '@/data/projects'
 import type { Project } from '@/types/project'
@@ -40,13 +41,15 @@ const useRemote = import.meta.env.VITE_USE_REMOTE_PROJECTS === 'true' && !!supab
 const primarySource: ProjectDataSource = useRemote ? remoteDataSource : localDataSource
 
 export async function getProjects(options?: GetProjectsOptions): Promise<Project[]> {
-  try {
-    return await primarySource.getAll(options)
-  } catch (err) {
+  const [err, data] = await tryit(primarySource.getAll.bind(primarySource))(options)
+
+  if (err) {
     if (useRemote) {
       console.warn('[ProjectService] Remote fetch failed, falling back to local data:', err)
       return localDataSource.getAll()
     }
     throw err
   }
+
+  return data
 }

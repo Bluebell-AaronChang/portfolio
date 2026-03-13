@@ -145,6 +145,16 @@ export default {
   'footer-rights': '© {year} Aaron Chang. All rights reserved.',
   'footer-github-label': 'GitHub',
   'footer-last-updated': 'Last updated: {time}',
+  'footer-uptime': 'Online for {days}d {hours}h {minutes}m {seconds}s',
+
+  'github-activity-title': 'Recent Activity',
+  'github-activity-error': 'Unable to load GitHub activity.',
+  'github-activity-empty': 'No recent activity.',
+  'github-pushed': 'pushed',
+  'github-time-just-now': 'just now',
+  'github-time-minutes': '{count}m ago',
+  'github-time-hours': '{count}h ago',
+  'github-time-days': '{count}d ago',
 
   'error-unknown': 'An unknown error occurred',
 }

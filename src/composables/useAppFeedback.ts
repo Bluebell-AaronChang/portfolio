@@ -1,16 +1,16 @@
 import { ref } from 'vue'
+import { uid } from 'radash'
 
 export interface Toast {
-  id: number
+  id: string
   message: string
   type: 'success' | 'error' | 'info'
 }
 
 const toasts = ref<Toast[]>([])
-let toastId = 0
 
 function addToast(message: string, type: Toast['type'], duration = 3000) {
-  const id = ++toastId
+  const id = uid(8)
   toasts.value.push({ id, message, type })
   setTimeout(() => {
     toasts.value = toasts.value.filter((t) => t.id !== id)
