@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useWindowScroll } from '@vueuse/core'
 import { useUiStore } from '@/stores/uiStore'
@@ -24,7 +24,6 @@ const isScrolled = computed(() => scrollY.value > 20)
 const isMobileMenuOpen = ref(false)
 
 const activeSection = ref('home')
-let observer: IntersectionObserver | null = null
 const sectionIds = NAV_KEYS.map((n) => n.href.slice(1))
 
 function handleNavClick(href: string) {
@@ -33,51 +32,45 @@ function handleNavClick(href: string) {
   history.replaceState(null, '', href)
 }
 
-onMounted(() => {
-  const sectionRatios = new Map<string, number>()
+function updateActiveByScroll() {
+  const offset = 100
 
-  observer = new IntersectionObserver(
-    (entries) => {
-      for (const entry of entries) {
-        sectionRatios.set(entry.target.id, entry.intersectionRatio)
-      }
+  const atBottom = Math.abs(
+    (window.innerHeight + scrollY.value) - document.documentElement.scrollHeight,
+  ) < 2
+  if (atBottom) {
+    const last = sectionIds[sectionIds.length - 1]
+    if (last !== activeSection.value) {
+      activeSection.value = last
+      history.replaceState(null, '', `#${last}`)
+    }
+    return
+  }
 
-      let bestId = ''
-      let bestRatio = 0
-      for (const id of sectionIds) {
-        const ratio = sectionRatios.get(id) ?? 0
-        if (ratio > bestRatio) {
-          bestRatio = ratio
-          bestId = id
-        }
-      }
-
-      if (bestId && bestRatio > 0) {
-        activeSection.value = bestId
-        history.replaceState(null, '', `#${bestId}`)
-      }
-    },
-    {
-      // 多個 threshold 讓 observer 更頻繁回報比例變化
-      threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1],
-      rootMargin: '-64px 0px 0px 0px', // 只扣掉 navbar 高度
-    },
-  )
+  let current = sectionIds[0]
 
   for (const id of sectionIds) {
     const el = document.getElementById(id)
-    if (el) observer.observe(el)
+    if (el && el.offsetTop <= scrollY.value + offset) {
+      current = id
+    }
   }
 
-  // 初始化：依據目前 hash 設定 active
+  if (current !== activeSection.value) {
+    activeSection.value = current
+    history.replaceState(null, '', `#${current}`)
+  }
+}
+
+watch(scrollY, updateActiveByScroll)
+
+onMounted(() => {
   const hash = window.location.hash.slice(1)
   if (hash && sectionIds.includes(hash)) {
     activeSection.value = hash
+  } else {
+    updateActiveByScroll()
   }
-})
-
-onUnmounted(() => {
-  observer?.disconnect()
 })
 
 function toggleMobileMenu() {

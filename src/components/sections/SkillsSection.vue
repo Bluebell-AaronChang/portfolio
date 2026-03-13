@@ -3,53 +3,9 @@ import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import SectionTitle from '@/components/ui/SectionTitle.vue'
 import AppTag from '@/components/ui/AppTag.vue'
+import { SKILL_DEFS } from '@/data/skills'
 
 const { t } = useI18n()
-
-interface SkillCategoryDef {
-  titleKey: string
-  icon: string
-  skills: { key?: string; label: string }[]
-}
-
-const SKILL_DEFS: SkillCategoryDef[] = [
-  {
-    titleKey: 'skills-backend',
-    icon: '⚙️',
-    skills: [
-      { label: 'C#' }, { label: '.NET' }, { label: 'ASP.NET' }, { label: 'API Design' }, { label: 'System Integration' },
-    ],
-  },
-  {
-    titleKey: 'skills-frontend',
-    icon: '🎨',
-    skills: [{ label: 'Vue 3' }, { label: 'TypeScript' }],
-  },
-  {
-    titleKey: 'skills-mobile',
-    icon: '📱',
-    skills: [{ label: 'Flutter' }, { label: 'Dart' }],
-  },
-  {
-    titleKey: 'skills-database',
-    icon: '🗄️',
-    skills: [{ label: 'MS SQL Server' }],
-  },
-  {
-    titleKey: 'skills-tools-process',
-    icon: '🛠️',
-    skills: [{ label: 'Git' }, { label: 'Docker' }, { label: 'Scrum' }],
-  },
-  {
-    titleKey: 'skills-soft-skills',
-    icon: '🤝',
-    skills: [
-      { key: 'skills-mentoring', label: 'Mentoring' },
-      { key: 'skills-cross-team', label: 'Cross‑Team Collaboration' },
-      { key: 'skills-technical-discussion', label: 'Technical Discussion' },
-    ],
-  },
-]
 
 const categories = computed(() =>
   SKILL_DEFS.map((cat) => ({

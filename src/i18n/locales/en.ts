@@ -59,7 +59,7 @@ export default {
   'project-wms-desc': 'Retail warehouse management system covering inbound/outbound management, real-time inventory tracking, stocktaking processes, and multi-ecommerce platform integration.',
   'project-wms-contribution': 'Developed warehouse process features, designed backend services and optimized database query performance.',
 
-  'project-tailtales-name': 'TailTales — Pet Health Management App',
+  'project-tailtales-name': 'Pet Health Management App',
   'project-tailtales-desc': 'A pet health management system designed for modern pet owners. Featuring "Warm Minimalism" design, it provides seamless multi-pet management, health records, and a smooth cross-step form experience with dynamic routing.',
   'project-tailtales-contribution': 'Independently responsible for full-stack architecture and UI/UX implementation. Used Riverpod for complex cross-page form state management with GoRouter Auth Guard route interception on the frontend; designed a normalized database with Supabase (PostgreSQL) and strict RLS (Row Level Security) for multi-user data isolation and security on the backend.',
 
@@ -69,12 +69,12 @@ export default {
 
   'project-mdm-name': 'Master Data Management System',
   'project-mdm-desc': 'Internal master data system ensuring cross-module data consistency with multi-brand architecture support, providing a reliable data foundation for core business processes.',
-  'project-mdm-contribution': 'Participated in core process design, ensuring data integrity and cross-system consistency.',
+  'project-mdm-contribution': 'Participated in core process design and maintenance, ensuring data integrity and cross-system consistency.',
   'project-digital-card-name': 'Digital Card — Google & Apple Wallet',
   'project-digital-card-desc': 'Digital card issuance system, building and maintaining Google Wallet / Apple Wallet card issuance mechanisms to enhance member digital experience.',
   'project-digital-card-contribution': 'Built the complete card issuance flow, handling third-party API integration and exception handling.',
   'project-ecommerce-name': 'E‑Commerce Platform Integration',
-  'project-ecommerce-desc': 'Integrated Shopify, Bloomreach and other e-commerce platforms, implementing data synchronization processes to ensure real-time order and inventory data consistency.',
+  'project-ecommerce-desc': 'Integrated Shopify, Bloomreach and other e-commerce platforms, implementing data synchronization processes to ensure multi-platform data consistency.',
   'project-ecommerce-contribution': 'Implemented data synchronization processes, ensuring stable and accurate data sync with future extensibility.',
   'project-supplier-name': 'Supplier Evaluation & Audit System',
   'project-supplier-desc': 'Supplier evaluation and internal audit workflow system, establishing multi-dimensional evaluation mechanisms and digitalizing audit operations.',
@@ -88,7 +88,7 @@ export default {
   'project-chrome-extension-contribution': 'Responsible for overall architecture design and development, integrating Strapi backend API for real-time project status tracking and management.',
 
   'project-interview-platform-name': 'Interview Management Platform',
-  'project-interview-platform-desc': 'Enterprise digitalization solution — built an interview management platform integrating candidate data management and interview process digitization to improve recruitment efficiency.',
+  'project-interview-platform-desc': 'Interview management platform integrating candidate data management and interview process digitization to improve recruitment efficiency.',
   'project-interview-platform-contribution': 'Built the interview management platform, integrating candidate data management and digitalizing the interview workflow for recruitment process transformation.',
 
   'project-wms-inventory-name': 'WMS — Semiconductor Warehouse Management System',
@@ -100,19 +100,19 @@ export default {
   'project-email-scheduler-contribution': 'Independently developed the automated email scheduling system, implementing scheduled delivery and conditional trigger mechanisms, significantly reducing manual operation costs.',
 
   'project-worktime-bot-name': 'Work-hour Reminder Bot (Synology Chat)',
-  'project-worktime-bot-desc': 'Work-hour reminder bot integrated with Synology Chat, improving internal work-hour management processes and reporting compliance.',
+  'project-worktime-bot-desc': 'Work-hour reminder bot integrated with Synology Chat, improving internal work-hour management processes.',
   'project-worktime-bot-contribution': 'Developed the work-hour reminder bot, delivering real-time push notifications via Synology Chat to improve work-hour reporting efficiency and compliance.',
 
   'project-face-recognition-name': 'Real-time Face Recognition Display System',
-  'project-face-recognition-desc': 'Built a real-time face recognition result display system using WebSocket technology, integrated with a third-party face recognition platform for instant result presentation.',
+  'project-face-recognition-desc': 'Built a real-time face recognition result display system using WebSocket technology, integrated with a third-party face recognition platform.',
   'project-face-recognition-contribution': 'Implemented WebSocket real-time communication architecture, integrating a third-party face recognition platform for instant recognition result display.',
 
   'project-news-dashboard-name': 'News Industry Traffic Dashboard',
-  'project-news-dashboard-desc': 'Internal traffic analysis war room for the news industry, providing real-time traffic monitoring and data visualization to support editorial decision-making.',
+  'project-news-dashboard-desc': 'Internal traffic analysis war room for the news industry, providing real-time traffic monitoring and data visualization.',
   'project-news-dashboard-contribution': 'Responsible for frontend development, implementing real-time traffic data visualization and war room interface design.',
 
   'project-waste-management-name': 'Manufacturing Waste Management System',
-  'project-waste-management-desc': 'Manufacturing waste management system including backend integration with cabinet door alarms and frontend management interface development, digitalizing the waste management process.',
+  'project-waste-management-desc': 'Manufacturing waste management system including backend integration with cabinet door alarms and frontend management interface development.',
   'project-waste-management-contribution': 'Responsible for backend cabinet door alarm system integration and frontend management interface development, digitalizing the waste management workflow.',
 
   'skills-title': 'Skills',
@@ -144,6 +144,7 @@ export default {
 
   'footer-rights': '© {year} Aaron Chang. All rights reserved.',
   'footer-github-label': 'GitHub',
+  'footer-last-updated': 'Last updated: {time}',
 
   'error-unknown': 'An unknown error occurred',
 }

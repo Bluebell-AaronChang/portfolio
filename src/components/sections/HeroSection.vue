@@ -3,12 +3,9 @@ import { useI18n } from 'vue-i18n'
 import AppButton from '@/components/ui/AppButton.vue'
 import AppTag from '@/components/ui/AppTag.vue'
 import avatarImg from '@/assets/aaron_img.jpg'
+import { HERO_TECH_TAGS } from '@/data/skills'
 
 const { t } = useI18n()
-
-const TECH_TAGS = [
-  'C#', '.NET', 'Vue 3', 'TypeScript', 'Flutter', 'MS SQL', 'System Design', 'API Integration', 'Scrum',
-]
 </script>
 
 <template>
@@ -59,7 +56,7 @@ const TECH_TAGS = [
       </div>
 
       <div class="mt-12 flex flex-wrap items-center justify-center gap-2">
-        <AppTag v-for="tag in TECH_TAGS" :key="tag" variant="outline">
+        <AppTag v-for="tag in HERO_TECH_TAGS" :key="tag" variant="outline">
           {{ tag }}
         </AppTag>
       </div>

@@ -59,7 +59,7 @@ export default {
   'project-wms-desc': '零售業倉儲管理系統，涵蓋入出庫管理、即時庫存追蹤、盤點流程，並支援多電商平台串接。',
   'project-wms-contribution': '參與倉儲流程功能開發，設計 backend service 並優化資料庫查詢效能。',
 
-  'project-tailtales-name': 'TailTales — 寵物健康管理 App',
+  'project-tailtales-name': '寵物健康管理 App',
   'project-tailtales-desc': '專為現代飼主設計的寵物健康管理系統。主打「溫暖簡約風 (Warm Minimalism)」，提供多寵物無縫管理、健康紀錄等功能，並具備流暢的跨步驟表單與動態路由體驗。',
   'project-tailtales-contribution': '獨立負責全端架構與 UI/UX 實作。前端使用 Riverpod 管理複雜的跨頁面表單狀態，並結合 GoRouter 實作 Auth Guard 路由攔截；後端使用 Supabase (PostgreSQL) 設計正規化資料庫，並嚴格設定 RLS (Row Level Security) 確保多用戶資料隔離與資安。',
 
@@ -69,12 +69,12 @@ export default {
 
   'project-mdm-name': '主檔資料管理系統',
   'project-mdm-desc': '內部主檔資料系統，確保跨模組資料一致性並支援多品牌架構，為企業核心流程提供可靠資料基礎。',
-  'project-mdm-contribution': '參與核心流程設計，確保資料完整性與跨系統一致性。',
+  'project-mdm-contribution': '參與核心流程設計與維護，確保資料完整性與跨系統一致性。',
   'project-digital-card-name': '數位卡 — Google & Apple Wallet',
   'project-digital-card-desc': '數位卡發卡系統，建置與維護 Google Wallet / Apple Wallet 發卡機制，提升會員數位體驗。',
   'project-digital-card-contribution': '建置完整發卡流程，處理第三方 API 整合與例外狀況。',
   'project-ecommerce-name': '電商平台串接',
-  'project-ecommerce-desc': '串接 Shopify、Bloomreach 等電商平台，實作資料同步流程，確保訂單與庫存資料即時一致。',
+  'project-ecommerce-desc': '串接 Shopify、Bloomreach 等電商平台，實作資料同步流程，確保多平台之資料一致性。',
   'project-ecommerce-contribution': '實作資料同步流程，確保資料同步穩定、正確，並具備後續擴充彈性。',
   'project-supplier-name': '供應商評比與稽核系統',
   'project-supplier-desc': '供應商評比系統與內部稽核流程系統，建立多維度評比機制並將稽核作業數位化。',
@@ -88,7 +88,7 @@ export default {
   'project-chrome-extension-contribution': '負責整體架構設計與開發，串接 Strapi 後端 API，實現即時專案狀態追蹤與管理功能。',
 
   'project-interview-platform-name': '面試管理平台',
-  'project-interview-platform-desc': '企業數位化解決方案——建置面試管理平台，整合候選人資料管理與面試流程電子化，提升招募作業效率。',
+  'project-interview-platform-desc': '面試管理平台，整合候選人資料管理與面試流程電子化，提升招募作業效率。',
   'project-interview-platform-contribution': '建置面試管理平台，整合候選人資料管理與面試流程電子化，實現招募流程數位化轉型。',
 
   'project-wms-inventory-name': '半導體倉儲管理系統',
@@ -100,19 +100,19 @@ export default {
   'project-email-scheduler-contribution': '獨立開發自動化信件排程系統，實現排程發送與條件觸發機制，大幅降低人工操作成本。',
 
   'project-worktime-bot-name': '工時提醒 Bot（Synology Chat）',
-  'project-worktime-bot-desc': '工時提醒 Bot，串接 Synology Chat，改善內部工時管理流程與填報合規性。',
+  'project-worktime-bot-desc': '工時提醒 Bot，串接 Synology Chat，改善內部工時管理流程。',
   'project-worktime-bot-contribution': '開發工時提醒 Bot，透過 Synology Chat 即時推播提醒，改善內部工時填報效率與合規性。',
 
   'project-face-recognition-name': '人臉辨識即時結果顯示系統',
-  'project-face-recognition-desc': '以 WebSocket 技術實作人臉辨識即時結果顯示系統，串接第三方人臉辨識平台，實現辨識結果即時呈現。',
+  'project-face-recognition-desc': '以 WebSocket 技術實作人臉辨識即時結果顯示系統，串接第三方人臉辨識平台。',
   'project-face-recognition-contribution': '實作 WebSocket 即時通訊架構，串接第三方人臉辨識平台，實現辨識結果即時呈現。',
 
   'project-news-dashboard-name': '新聞產業流量分析戰情室',
-  'project-news-dashboard-desc': '新聞產業內部流量分析戰情室，提供即時流量監控與數據視覺化，輔助編輯台即時決策。',
+  'project-news-dashboard-desc': '新聞產業內部流量分析戰情室，提供即時流量監控與數據視覺化。',
   'project-news-dashboard-contribution': '負責前端製作，實現即時流量數據視覺化與戰情室介面設計。',
 
   'project-waste-management-name': '製造業廢棄物管理系統',
-  'project-waste-management-desc': '製造業廢棄物管理系統，包含後端串接櫃門警報與前端管理畫面製作，實現廢棄物管理流程數位化。',
+  'project-waste-management-desc': '製造業廢棄物管理系統，包含後端串接櫃門警報與前端管理畫面製作。',
   'project-waste-management-contribution': '負責後端串接櫃門警報系統與前端管理畫面開發，實現廢棄物管理流程數位化。',
 
   'skills-title': '技能',
@@ -144,6 +144,7 @@ export default {
 
   'footer-rights': '© {year} Aaron Chang. 保留所有權利。',
   'footer-github-label': 'GitHub',
+  'footer-last-updated': '最後更新於 {time}',
 
   'error-unknown': '發生未知錯誤',
 }

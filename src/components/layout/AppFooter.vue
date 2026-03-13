@@ -1,17 +1,36 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const currentYear = new Date().getFullYear()
+
+const lastUpdated = computed(() => {
+  const date = new Date(__BUILD_TIME__)
+  return date.toLocaleString(locale.value === 'zh-tw' ? 'zh-TW' : 'en-US', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+  })
+})
 </script>
 
 <template>
   <footer role="contentinfo" class="border-t border-border bg-muted/30">
     <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8">
       <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
-        <p class="text-sm text-muted-foreground">
-          {{ t('footer-rights', { year: currentYear }) }}
-        </p>
+        <div class="flex flex-col items-center sm:items-start gap-1">
+          <p class="text-sm text-muted-foreground">
+            {{ t('footer-rights', { year: currentYear }) }}
+          </p>
+          <p class="text-xs text-muted-foreground/60">
+            {{ t('footer-last-updated', { time: lastUpdated }) }}
+          </p>
+        </div>
         <div class="flex items-center gap-4">
           <a
             href="https://github.com/Bluebell-AaronChang"
