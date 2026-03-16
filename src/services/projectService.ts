@@ -1,5 +1,6 @@
 import { tryit } from 'radashi'
 import { supabase } from '@/api/supabase'
+import { toAppError } from '@/api/supabaseError'
 import type { Project } from '@/types/project'
 
 export interface GetProjectsOptions {
@@ -56,14 +57,11 @@ export async function getProjects(options?: GetProjectsOptions): Promise<Project
 
   const [err, result] = await tryit(async () => {
     const { data, error } = await query
-    if (error) throw { code: error.code, message: error.message, type: 'business' as const }
+    if (error) throw toAppError(error)
     return (data as unknown as Project[]) ?? []
   })()
 
-  if (err) {
-    console.error('[ProjectService] Failed to fetch projects:', err)
-    throw err
-  }
+  if (err) throw err
 
   return result
 }
@@ -80,91 +78,106 @@ export async function getAllProjects(options?: GetProjectsOptions): Promise<Proj
     query.abortSignal(options.signal)
   }
 
-  const [err, result] = await tryit(async () => {
+  const [err2, result2] = await tryit(async () => {
     const { data, error } = await query
-    if (error) throw { code: error.code, message: error.message, type: 'business' as const }
+    if (error) throw toAppError(error)
     return (data as unknown as Project[]) ?? []
   })()
 
-  if (err) {
-    console.error('[ProjectService] Failed to fetch all projects:', err)
-    throw err
-  }
+  if (err2) throw err2
 
-  return result
+  return result2
 }
 
 export async function getProjectById(id: string): Promise<Project | null> {
   if (!supabase) throw new Error('[ProjectService] Supabase client not initialized')
 
-  const { data, error } = await supabase
-    .from('projects')
-    .select(PROJECTS_SELECT)
-    .eq('id', id)
-    .single()
+  const [err, result] = await tryit(async () => {
+    const { data, error } = await supabase!
+      .from('projects')
+      .select(PROJECTS_SELECT)
+      .eq('id', id)
+      .single()
+    if (error) throw toAppError(error)
+    return data as unknown as Project
+  })()
 
-  if (error) throw error
-  return data as unknown as Project
+  if (err) throw err
+  return result
 }
 
 export async function createProject(project: CreateProjectDto): Promise<Project> {
   if (!supabase) throw new Error('[ProjectService] Supabase client not initialized')
 
-  const { data, error } = await supabase
-    .from('projects')
-    .insert(project)
-    .select(PROJECTS_SELECT)
-    .single()
+  const [err, result] = await tryit(async () => {
+    const { data, error } = await supabase!
+      .from('projects')
+      .insert(project)
+      .select(PROJECTS_SELECT)
+      .single()
+    if (error) throw toAppError(error)
+    return data as unknown as Project
+  })()
 
-  if (error) throw error
-  return data as unknown as Project
+  if (err) throw err
+  return result
 }
 
 export async function updateProject(id: string, project: UpdateProjectDto): Promise<Project> {
   if (!supabase) throw new Error('[ProjectService] Supabase client not initialized')
 
-  const { data, error } = await supabase
-    .from('projects')
-    .update(project)
-    .eq('id', id)
-    .select(PROJECTS_SELECT)
-    .single()
+  const [err, result] = await tryit(async () => {
+    const { data, error } = await supabase!
+      .from('projects')
+      .update(project)
+      .eq('id', id)
+      .select(PROJECTS_SELECT)
+      .single()
+    if (error) throw toAppError(error)
+    return data as unknown as Project
+  })()
 
-  if (error) throw error
-  return data as unknown as Project
+  if (err) throw err
+  return result
 }
 
 export async function deleteProject(id: string): Promise<void> {
   if (!supabase) throw new Error('[ProjectService] Supabase client not initialized')
 
-  const { error } = await supabase
-    .from('projects')
-    .delete()
-    .eq('id', id)
+  const [err] = await tryit(async () => {
+    const { error } = await supabase!
+      .from('projects')
+      .delete()
+      .eq('id', id)
+    if (error) throw toAppError(error)
+  })()
 
-  if (error) throw error
+  if (err) throw err
 }
 
 export async function toggleEnabled(id: string): Promise<Project> {
   if (!supabase) throw new Error('[ProjectService] Supabase client not initialized')
 
-  const { data: current, error: fetchError } = await supabase
-    .from('projects')
-    .select('enabled')
-    .eq('id', id)
-    .single()
+  const [err, result] = await tryit(async () => {
+    const { data: current, error: fetchError } = await supabase!
+      .from('projects')
+      .select('enabled')
+      .eq('id', id)
+      .single()
+    if (fetchError) throw toAppError(fetchError)
 
-  if (fetchError) throw fetchError
+    const { data, error } = await supabase!
+      .from('projects')
+      .update({ enabled: !(current as { enabled: boolean }).enabled })
+      .eq('id', id)
+      .select(PROJECTS_SELECT)
+      .single()
+    if (error) throw toAppError(error)
+    return data as unknown as Project
+  })()
 
-  const { data, error } = await supabase
-    .from('projects')
-    .update({ enabled: !(current as { enabled: boolean }).enabled })
-    .eq('id', id)
-    .select(PROJECTS_SELECT)
-    .single()
-
-  if (error) throw error
-  return data as unknown as Project
+  if (err) throw err
+  return result
 }
 
 export const projectService = {

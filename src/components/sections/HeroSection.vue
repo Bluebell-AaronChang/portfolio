@@ -4,7 +4,7 @@ import { useI18n } from 'vue-i18n'
 import AppButton from '@/components/ui/AppButton.vue'
 import AppTag from '@/components/ui/AppTag.vue'
 import avatarImg from '@/assets/aaron_img.jpg'
-import { supabase } from '@/api/supabase'
+import { skillService } from '@/services/skillService'
 
 const { t } = useI18n()
 
@@ -12,12 +12,7 @@ const heroTags = ref<string[]>([])
 
 onMounted(async () => {
   try {
-    const { data } = await supabase!
-      .from('skills')
-      .select('name')
-      .eq('show_in_hero', true)
-      .order('order_index', { ascending: true })
-    heroTags.value = data?.map((s) => s.name) ?? []
+    heroTags.value = await skillService.getHeroSkillNames()
   } catch (err) {
     console.error('Failed to load hero tags:', err)
   }

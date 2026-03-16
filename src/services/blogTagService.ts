@@ -1,5 +1,6 @@
 import { tryit } from 'radashi'
 import { supabase } from '@/api/supabase'
+import { toAppError } from '@/api/supabaseError'
 
 export interface BlogTag {
     id: string
@@ -23,44 +24,58 @@ export async function getBlogTags(): Promise<BlogTag[]> {
             .from('blog_tags')
             .select('*')
             .order('name')
-        if (error) throw error
+        if (error) throw toAppError(error)
         return (data as BlogTag[]) ?? []
     })()
 
-    if (err) {
-        console.warn('[BlogTagService] Failed to fetch tags:', err)
-        return []
-    }
+    if (err) throw err
     return result
 }
 
 export async function createBlogTag(dto: CreateBlogTagDto): Promise<BlogTag> {
     if (!supabase) throw new Error('Supabase not initialized')
-    const { data, error } = await supabase
-        .from('blog_tags')
-        .insert(dto)
-        .select('*')
-        .single()
-    if (error) throw error
-    return data as BlogTag
+
+    const [err, result] = await tryit(async () => {
+        const { data, error } = await supabase!
+            .from('blog_tags')
+            .insert(dto)
+            .select('*')
+            .single()
+        if (error) throw toAppError(error)
+        return data as BlogTag
+    })()
+
+    if (err) throw err
+    return result
 }
 
 export async function updateBlogTag(id: string, dto: Partial<CreateBlogTagDto>): Promise<BlogTag> {
     if (!supabase) throw new Error('Supabase not initialized')
-    const { data, error } = await supabase
-        .from('blog_tags')
-        .update(dto)
-        .eq('id', id)
-        .select('*')
-        .single()
-    if (error) throw error
-    return data as BlogTag
+
+    const [err, result] = await tryit(async () => {
+        const { data, error } = await supabase!
+            .from('blog_tags')
+            .update(dto)
+            .eq('id', id)
+            .select('*')
+            .single()
+        if (error) throw toAppError(error)
+        return data as BlogTag
+    })()
+
+    if (err) throw err
+    return result
 }
 
 export async function deleteBlogTag(id: string): Promise<void> {
     if (!supabase) throw new Error('Supabase not initialized')
-    const { error } = await supabase.from('blog_tags').delete().eq('id', id)
-    if (error) throw error
+
+    const [err] = await tryit(async () => {
+        const { error } = await supabase!.from('blog_tags').delete().eq('id', id)
+        if (error) throw toAppError(error)
+    })()
+
+    if (err) throw err
 }
 
 export const blogTagService = { getBlogTags, createBlogTag, updateBlogTag, deleteBlogTag }

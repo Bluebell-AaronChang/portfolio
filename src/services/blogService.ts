@@ -1,5 +1,6 @@
 import { tryit } from 'radashi'
 import { supabase } from '@/api/supabase'
+import { toAppError } from '@/api/supabaseError'
 import type { BlogPost } from '@/types/blog'
 
 const BLOG_POSTS_SELECT = 'id, slug, title_zh, title_en, summary_zh, summary_en, content_zh, content_en, cover_image, tags, published, featured, view_count, published_at, created_at, updated_at, status'
@@ -64,14 +65,11 @@ export async function getBlogPosts(options?: GetBlogPostsOptions): Promise<BlogP
 
   const [err, result] = await tryit(async () => {
     const { data, error } = await query
-    if (error) throw { code: error.code, message: error.message, type: 'business' as const }
+    if (error) throw toAppError(error)
     return (data as BlogPost[]) ?? []
   })()
 
-  if (err) {
-    console.warn('[BlogService] Failed to fetch posts:', err)
-    return []
-  }
+  if (err) throw err
 
   return result
 }
@@ -91,14 +89,11 @@ export async function getBlogPostBySlug(slug: string, options?: GetBlogPostBySlu
 
   const [err, result] = await tryit(async () => {
     const { data, error } = await query
-    if (error) throw { code: error.code, message: error.message, type: 'business' as const }
+    if (error) throw toAppError(error)
     return data as BlogPost | null
   })()
 
-  if (err) {
-    console.warn('[BlogService] Failed to fetch post by slug:', err)
-    return null
-  }
+  if (err) throw err
 
   return result
 }
@@ -106,17 +101,21 @@ export async function getBlogPostBySlug(slug: string, options?: GetBlogPostBySlu
 export async function createPost(post: CreateBlogPostDto): Promise<BlogPost> {
   if (!supabase) throw new Error('[BlogService] Supabase client not initialized')
 
-  const { data, error } = await supabase
-    .from('blog_posts')
-    .insert({
-      ...post,
-      published: post.status === 'published',
-    })
-    .select(BLOG_POSTS_SELECT)
-    .single()
+  const [err, result] = await tryit(async () => {
+    const { data, error } = await supabase!
+      .from('blog_posts')
+      .insert({
+        ...post,
+        published: post.status === 'published',
+      })
+      .select(BLOG_POSTS_SELECT)
+      .single()
+    if (error) throw toAppError(error)
+    return data as BlogPost
+  })()
 
-  if (error) throw error
-  return data as BlogPost
+  if (err) throw err
+  return result
 }
 
 export async function updatePost(id: string, post: UpdateBlogPostDto): Promise<BlogPost> {
@@ -127,26 +126,33 @@ export async function updatePost(id: string, post: UpdateBlogPostDto): Promise<B
     updateData.published = post.status === 'published'
   }
 
-  const { data, error } = await supabase
-    .from('blog_posts')
-    .update(updateData)
-    .eq('id', id)
-    .select(BLOG_POSTS_SELECT)
-    .single()
+  const [err, result] = await tryit(async () => {
+    const { data, error } = await supabase!
+      .from('blog_posts')
+      .update(updateData)
+      .eq('id', id)
+      .select(BLOG_POSTS_SELECT)
+      .single()
+    if (error) throw toAppError(error)
+    return data as BlogPost
+  })()
 
-  if (error) throw error
-  return data as BlogPost
+  if (err) throw err
+  return result
 }
 
 export async function deletePost(id: string): Promise<void> {
   if (!supabase) throw new Error('[BlogService] Supabase client not initialized')
 
-  const { error } = await supabase
-    .from('blog_posts')
-    .delete()
-    .eq('id', id)
+  const [err] = await tryit(async () => {
+    const { error } = await supabase!
+      .from('blog_posts')
+      .delete()
+      .eq('id', id)
+    if (error) throw toAppError(error)
+  })()
 
-  if (error) throw error
+  if (err) throw err
 }
 
 export const blogService = {
