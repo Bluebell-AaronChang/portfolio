@@ -134,7 +134,7 @@
                         </div>
                         <div class="space-y-2">
                             <Label for="type">Type *</Label>
-                            <Input id="type" v-model="formData.project_type" required placeholder="Web, Mobile, etc." />
+                            <Input id="type" v-model="formData.project_type" required placeholder="professional or personal" />
                         </div>
                         <div class="space-y-2">
                             <Label class="flex items-center gap-2 cursor-pointer mt-8">
