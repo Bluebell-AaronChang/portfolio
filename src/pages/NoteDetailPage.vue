@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, nextTick, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { RouterLink, useRoute } from 'vue-router'
-import { useClipboard } from '@vueuse/core'
+import { useClipboard, useColorMode } from '@vueuse/core'
 import AppTag from '@/components/ui/AppTag.vue'
 import { useBlogPostBySlugQuery } from '@/queries/blogQueries'
 import { getNoteTitle, getNoteSummary, getNoteContent, getNoteTags } from '@/types/blog'
@@ -16,12 +16,44 @@ const { t, locale } = useI18n()
 const route = useRoute()
 const { success } = useAppFeedback()
 const currentLocale = computed(() => locale.value as NoteLocale)
+const colorMode = useColorMode()
 
 const slugRef = computed(() => props.slug)
 const { data: post, isLoading, isError } = useBlogPostBySlugQuery(slugRef)
 
 const renderedHtml = ref('')
 const isRendering = ref(false)
+
+/** Render all `.mermaid-block` divs inside the article using mermaid.js */
+async function renderMermaidBlocks() {
+  await nextTick()
+  const blocks = document.querySelectorAll<HTMLElement>('.mermaid-block')
+  if (blocks.length === 0) return
+
+  const mermaid = (await import('mermaid')).default
+  const isDark = colorMode.value === 'dark'
+    || (colorMode.value === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches)
+
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: isDark ? 'dark' : 'default',
+    securityLevel: 'loose',
+  })
+
+  for (const block of blocks) {
+    // Skip already-rendered blocks
+    if (block.getAttribute('data-mermaid-rendered')) continue
+    const id = `mermaid-${Math.random().toString(36).slice(2, 10)}`
+    try {
+      const { svg } = await mermaid.render(id, block.textContent?.trim() ?? '')
+      block.innerHTML = svg
+      block.setAttribute('data-mermaid-rendered', 'true')
+    } catch {
+      // If rendering fails, fall back to showing the code as-is
+      block.classList.add('mermaid-error')
+    }
+  }
+}
 
 watch(
   [post, currentLocale],
@@ -38,9 +70,23 @@ watch(
     } finally {
       isRendering.value = false
     }
+    // After html is set, render mermaid blocks
+    await renderMermaidBlocks()
   },
   { immediate: true },
 )
+
+// Re-render mermaid when color mode changes (light ↔ dark)
+watch(colorMode, async () => {
+  // Reset rendered state so blocks get re-rendered with new theme
+  const blocks = document.querySelectorAll<HTMLElement>('.mermaid-block[data-mermaid-rendered]')
+  // We need to re-render from source, so re-trigger the full markdown render
+  const p = post.value
+  if (!p || blocks.length === 0) return
+  // Clear rendered flag and content, then re-render
+  renderedHtml.value = await renderMarkdown(getNoteContent(p, currentLocale.value))
+  await renderMermaidBlocks()
+})
 
 function formatDate(dateStr: string | null): string {
   if (!dateStr) return ''
@@ -152,4 +198,26 @@ const copyLink = async () => {
   </main>
 </template>
 
-<style></style>
+<style>
+.mermaid-block {
+  display: flex;
+  justify-content: center;
+  margin: 1.5rem 0;
+  overflow-x: auto;
+}
+
+.mermaid-block svg {
+  max-width: 100%;
+  height: auto;
+}
+
+.mermaid-block.mermaid-error {
+  white-space: pre-wrap;
+  font-family: monospace;
+  font-size: 0.875rem;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background: var(--color-muted, #f3f4f6);
+  color: var(--color-muted-foreground, #6b7280);
+}
+</style>

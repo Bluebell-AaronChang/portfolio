@@ -33,11 +33,16 @@ export async function renderMarkdown(content: string): Promise<string> {
 
   if (matches.length === 0) return html
 
-  let highlighter: Highlighter
-  try {
-    highlighter = await getHighlighter()
-  } catch {
-    return html
+  let highlighter: Highlighter | null = null
+
+  // Only load shiki if there are non-mermaid code blocks
+  const hasNonMermaid = matches.some(m => m[1] !== 'mermaid')
+  if (hasNonMermaid) {
+    try {
+      highlighter = await getHighlighter()
+    } catch {
+      // fall through — mermaid blocks can still be handled
+    }
   }
 
   let result = html
@@ -45,6 +50,15 @@ export async function renderMarkdown(content: string): Promise<string> {
   for (const match of matches) {
     const [fullMatch, lang, rawCode] = match
     const decoded = decodeHtmlEntities(rawCode)
+
+    // Replace mermaid blocks with a special container div
+    if (lang === 'mermaid') {
+      const mermaidHtml = `<div class="mermaid-block">${decoded}</div>`
+      result = result.replace(fullMatch, mermaidHtml)
+      continue
+    }
+
+    if (!highlighter) continue
 
     const loadedLangs = highlighter.getLoadedLanguages()
     if (!loadedLangs.includes(lang as never)) {
