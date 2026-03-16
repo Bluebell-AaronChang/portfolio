@@ -56,11 +56,11 @@ const { copy, copied } = useClipboard()
 
 const copyLink = async () => {
   const origin = import.meta.env.PROD
-    ? 'https://aaronchang.dev' // Replace with your actual domain
+    ? 'https://aachang.me'
     : 'http://localhost:5173'
   const fullUrl = `${origin}${route.fullPath}`
   await copy(fullUrl)
-  success(t('notes.detail.link-copied'))
+  success(t('notes-link-copied'))
 }
 </script>
 
