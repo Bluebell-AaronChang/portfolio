@@ -67,7 +67,7 @@ export default {
   'skills-cross-team': 'Cross‑Team Collaboration',
   'skills-technical-discussion': 'Technical Discussion',
 
-  'mindset-title': 'Work Attitude',
+  'mindset-title': 'Engineering Mindset',
   'mindset-subtitle': 'Things I pay attention to at work.',
   'mindset-user-centered-title': 'Focus on User Needs',
   'mindset-user-centered-desc': 'Trying to start from user needs and think about feature design from actual use cases.',

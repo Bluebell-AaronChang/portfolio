@@ -67,7 +67,7 @@ export default {
   'skills-cross-team': '跨團隊協作',
   'skills-technical-discussion': '技術討論',
 
-  'mindset-title': '工作心態',
+  'mindset-title': '工程思維',
   'mindset-subtitle': '工作時會注意的事項。',
   'mindset-user-centered-title': '重視使用者需求',
   'mindset-user-centered-desc': '盡量以使用者需求為出發點，從實際使用情境思考功能設計。',

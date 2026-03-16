@@ -66,7 +66,10 @@ function updateActiveByScroll() {
     html.offsetHeight
   )
 
-  const atBottom = Math.abs((viewportHeight + scrollPosition) - documentHeight) < 2
+  // Only treat as "at bottom" when the user has actually scrolled down
+  const atBottom =
+    scrollPosition > 0 &&
+    Math.abs((viewportHeight + scrollPosition) - documentHeight) < 2
 
   if (atBottom) {
     const last = sectionIds[sectionIds.length - 1]
@@ -83,8 +86,7 @@ function updateActiveByScroll() {
     const el = document.querySelector(`#${id}`)
     if (el) {
       const rect = el.getBoundingClientRect()
-      const elementTop = scrollPosition + rect.top
-      if (elementTop <= scrollPosition + offset) {
+      if (rect.top <= offset) {
         current = id
       }
     }
