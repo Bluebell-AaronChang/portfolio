@@ -1,9 +1,5 @@
 <template>
     <div class="min-h-screen flex items-center justify-center bg-background px-4">
-        <div class="absolute top-4 right-4">
-            <ModeToggle />
-        </div>
-
         <div class="w-full max-w-md">
             <Card>
                 <CardHeader class="text-center">
@@ -83,7 +79,6 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import ModeToggle from '@/components/ui/ModeToggle.vue'
 
 const router = useRouter()
 const route = useRoute()

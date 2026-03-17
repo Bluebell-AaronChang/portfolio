@@ -6,7 +6,6 @@
                 <!-- Header -->
                 <div class="flex h-16 items-center justify-between border-b border-border px-6">
                     <h1 class="text-xl font-bold tracking-tight">Admin Panel</h1>
-                    <ModeToggle />
                 </div>
 
                 <!-- Navigation -->
@@ -98,7 +97,6 @@ import { computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
 import { Button } from '@/components/ui/button'
-import ModeToggle from '@/components/ui/ModeToggle.vue'
 
 const router = useRouter()
 const route = useRoute()

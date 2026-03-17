@@ -1,15 +1,8 @@
 import { defineStore } from 'pinia'
-import { useColorMode } from '@vueuse/core'
+import { ref } from 'vue'
 
 export const useUiStore = defineStore('ui', () => {
-  const mode = useColorMode({
-    selector: 'html',
-    attribute: 'class',
-    modes: {
-      light: '',
-      dark: 'dark',
-    },
-  })
+  const mode = ref('dark' as const)
 
   return {
     mode,

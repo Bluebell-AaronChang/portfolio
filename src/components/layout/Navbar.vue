@@ -5,7 +5,6 @@ import { useRoute, RouterLink } from 'vue-router'
 import { useWindowScroll, useWindowSize } from '@vueuse/core'
 import { useLocale } from '@/composables/useLocale'
 import AppButton from '@/components/ui/AppButton.vue'
-import ModeToggle from '@/components/ui/ModeToggle.vue'
 
 const { t } = useI18n()
 const route = useRoute()
@@ -161,7 +160,6 @@ const localeLabel = computed(() => (currentLocale.value === 'zh-tw' ? 'EN' : 'ä¸
             :aria-label="t('nav-toggle-locale')" @click="toggleLocale">
             {{ localeLabel }}
           </button>
-          <ModeToggle />
         </div>
 
         <div class="md:hidden flex items-center gap-2">
@@ -170,7 +168,6 @@ const localeLabel = computed(() => (currentLocale.value === 'zh-tw' ? 'EN' : 'ä¸
             :aria-label="t('nav-toggle-locale')" @click="toggleLocale">
             {{ localeLabel }}
           </button>
-          <ModeToggle />
           <AppButton variant="ghost" size="sm" @click="toggleMobileMenu">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
               stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

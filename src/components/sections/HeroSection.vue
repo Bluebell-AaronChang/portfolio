@@ -271,7 +271,7 @@ onBeforeUnmount(() => {
     :aria-label="t('nav-home')"
     class="hero-section relative flex min-h-screen items-center justify-center overflow-hidden"
   >
-    <div class="absolute inset-0 z-0 bg-[#0d1117] dark:bg-black" aria-hidden="true">
+    <div class="absolute inset-0 z-0 bg-black" aria-hidden="true">
       <div class="scanline-overlay absolute inset-0" />
     </div>
 
@@ -382,10 +382,6 @@ onBeforeUnmount(() => {
 .code-block {
   max-width: 340px;
   line-height: 1.4;
-  color: rgba(0, 140, 255, 0.5);
-}
-
-:is(.dark) .code-block {
   color: rgba(0, 255, 120, 0.7);
 }
 

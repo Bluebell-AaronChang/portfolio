@@ -2,7 +2,7 @@
 import { computed, nextTick, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { RouterLink, useRoute } from 'vue-router'
-import { useClipboard, useColorMode } from '@vueuse/core'
+import { useClipboard } from '@vueuse/core'
 import AppTag from '@/components/ui/AppTag.vue'
 import { useBlogPostBySlugQuery } from '@/queries/blogQueries'
 import { getNoteTitle, getNoteSummary, getNoteContent, getNoteTags } from '@/types/blog'
@@ -16,7 +16,6 @@ const { t, locale } = useI18n()
 const route = useRoute()
 const { success } = useAppFeedback()
 const currentLocale = computed(() => locale.value as NoteLocale)
-const colorMode = useColorMode()
 
 const slugRef = computed(() => props.slug)
 const { data: post, isLoading, isError } = useBlogPostBySlugQuery(slugRef)
@@ -31,12 +30,10 @@ async function renderMermaidBlocks() {
   if (blocks.length === 0) return
 
   const mermaid = (await import('mermaid')).default
-  const isDark = colorMode.value === 'dark'
-    || (colorMode.value === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches)
 
   mermaid.initialize({
     startOnLoad: false,
-    theme: isDark ? 'dark' : 'default',
+    theme: 'dark',
     securityLevel: 'loose',
   })
 
@@ -75,18 +72,6 @@ watch(
   },
   { immediate: true },
 )
-
-// Re-render mermaid when color mode changes (light ↔ dark)
-watch(colorMode, async () => {
-  // Reset rendered state so blocks get re-rendered with new theme
-  const blocks = document.querySelectorAll<HTMLElement>('.mermaid-block[data-mermaid-rendered]')
-  // We need to re-render from source, so re-trigger the full markdown render
-  const p = post.value
-  if (!p || blocks.length === 0) return
-  // Clear rendered flag and content, then re-render
-  renderedHtml.value = await renderMarkdown(getNoteContent(p, currentLocale.value))
-  await renderMermaidBlocks()
-})
 
 function formatDate(dateStr: string | null): string {
   if (!dateStr) return ''
