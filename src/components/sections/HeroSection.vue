@@ -20,20 +20,76 @@ onMounted(async () => {
   heroTags.value = result
 })
 
-const CODE_SNIPPETS = [
-  'public class Startup\n{\n  public void ConfigureServices(IServiceCollection s)\n  {\n    s.AddControllers();\n    s.AddSwaggerGen();\n  }\n}',
-  '[ApiController]\n[Route("api/[controller]")]\npublic class UsersController : ControllerBase\n{\n  private readonly IUserService _svc;\n\n  [HttpGet("{id}")]\n  public async Task GetById(int id)\n    =\x3e Ok(await _svc.GetByIdAsync(id));\n}',
-  'builder.Services\n  .AddAuthentication(JwtBearerDefaults.Scheme)\n  .AddJwtBearer(opt =\x3e\n  {\n    opt.TokenValidationParameters = new()\n    {\n      ValidateIssuer = true,\n      ValidateAudience = true\n    };\n  });',
-  'const router = createRouter({\n  history: createWebHistory(),\n  routes: [\n    { path: "/", component: Home },\n    { path: "/about", component: About },\n  ],\n})',
-  'public interface IRepository\n{\n  Task GetByIdAsync(int id);\n  Task GetAllAsync();\n  Task AddAsync(T entity);\n  Task UpdateAsync(T entity);\n  Task DeleteAsync(int id);\n}',
-  'app.MapGet("/api/health", () =\x3e\n  Results.Ok(new { Status = "Healthy" }));\n\napp.MapPost("/api/items", async\n  (Item item, AppDbContext db) =\x3e\n{\n  db.Items.Add(item);\n  await db.SaveChangesAsync();\n  return Results.Created();\n});',
-  'import { ref, computed } from "vue"\n\nconst count = ref(0)\nconst doubled = computed(\n  () =\x3e count.value * 2\n)\n\nfunction increment() {\n  count.value++\n}',
-  'services.AddDbContext(opt =\x3e\n  opt.UseNpgsql(\n    config.GetConnectionString("Default")\n  ));\n\nservices.AddScoped();',
-  'export function useAuth() {\n  const user = ref(null)\n  const isAuthenticated = computed(\n    () =\x3e !!user.value\n  )\n\n  async function login(cred: Login) {\n    const { data } = await api.post(\n      "/auth", cred\n    )\n    user.value = data.user\n  }\n\n  return { user, isAuthenticated, login }\n}',
-  'public record CreateOrderCommand(\n  int CustomerId,\n  List Items\n) : IRequest;\n\npublic class CreateOrderHandler\n  : IRequestHandler\n{\n  public async Task Handle(\n    CreateOrderCommand cmd,\n    CancellationToken ct)\n  {\n    var order = Order.Create(cmd.CustomerId);\n    return new OrderResult(order.Id);\n  }\n}',
-  '.fade-enter-active,\n.fade-leave-active {\n  transition: opacity 0.3s ease;\n}\n.fade-enter-from,\n.fade-leave-to {\n  opacity: 0;\n}',
-  'const { data, error } = await supabase\n  .from("projects")\n  .select("*")\n  .eq("enabled", true)\n  .order("sort_order", { ascending: true })',
+interface SnippetDef {
+  code: string
+  tags: string[]
+}
+
+const SNIPPET_DEFS: SnippetDef[] = [
+  {
+    code: 'public class Startup\n{\n  public void ConfigureServices(IServiceCollection s)\n  {\n    s.AddControllers();\n    s.AddSwaggerGen();\n  }\n}',
+    tags: ['C#', '.NET', 'ASP.NET'],
+  },
+  {
+    code: '[ApiController]\n[Route("api/[controller]")]\npublic class UsersController : ControllerBase\n{\n  private readonly IUserService _svc;\n\n  [HttpGet("{id}")]\n  public async Task GetById(int id)\n    =\x3e Ok(await _svc.GetByIdAsync(id));\n}',
+    tags: ['C#', '.NET', 'ASP.NET', 'API Design'],
+  },
+  {
+    code: 'builder.Services\n  .AddAuthentication(JwtBearerDefaults.Scheme)\n  .AddJwtBearer(opt =\x3e\n  {\n    opt.TokenValidationParameters = new()\n    {\n      ValidateIssuer = true,\n      ValidateAudience = true\n    };\n  });',
+    tags: ['C#', '.NET', 'ASP.NET'],
+  },
+  {
+    code: 'const router = createRouter({\n  history: createWebHistory(),\n  routes: [\n    { path: "/", component: Home },\n    { path: "/about", component: About },\n  ],\n})',
+    tags: ['Vue 3', 'TypeScript'],
+  },
+  {
+    code: 'public interface IRepository\n{\n  Task GetByIdAsync(int id);\n  Task GetAllAsync();\n  Task AddAsync(T entity);\n  Task UpdateAsync(T entity);\n  Task DeleteAsync(int id);\n}',
+    tags: ['C#', '.NET', 'API Design'],
+  },
+  {
+    code: 'app.MapGet("/api/health", () =\x3e\n  Results.Ok(new { Status = "Healthy" }));\n\napp.MapPost("/api/items", async\n  (Item item, AppDbContext db) =\x3e\n{\n  db.Items.Add(item);\n  await db.SaveChangesAsync();\n  return Results.Created();\n});',
+    tags: ['C#', '.NET', 'ASP.NET', 'API Design'],
+  },
+  {
+    code: 'import { ref, computed } from "vue"\n\nconst count = ref(0)\nconst doubled = computed(\n  () =\x3e count.value * 2\n)\n\nfunction increment() {\n  count.value++\n}',
+    tags: ['Vue 3', 'TypeScript'],
+  },
+  {
+    code: 'services.AddDbContext(opt =\x3e\n  opt.UseNpgsql(\n    config.GetConnectionString("Default")\n  ));\n\nservices.AddScoped();',
+    tags: ['C#', '.NET', 'MS SQL'],
+  },
+  {
+    code: 'export function useAuth() {\n  const user = ref(null)\n  const isAuthenticated = computed(\n    () =\x3e !!user.value\n  )\n\n  async function login(cred: Login) {\n    const { data } = await api.post(\n      "/auth", cred\n    )\n    user.value = data.user\n  }\n\n  return { user, isAuthenticated, login }\n}',
+    tags: ['Vue 3', 'TypeScript', 'API Design'],
+  },
+  {
+    code: 'public record CreateOrderCommand(\n  int CustomerId,\n  List Items\n) : IRequest;\n\npublic class CreateOrderHandler\n  : IRequestHandler\n{\n  public async Task Handle(\n    CreateOrderCommand cmd,\n    CancellationToken ct)\n  {\n    var order = Order.Create(cmd.CustomerId);\n    return new OrderResult(order.Id);\n  }\n}',
+    tags: ['C#', '.NET'],
+  },
+  {
+    code: '.fade-enter-active,\n.fade-leave-active {\n  transition: opacity 0.3s ease;\n}\n.fade-enter-from,\n.fade-leave-to {\n  opacity: 0;\n}',
+    tags: ['Vue 3'],
+  },
+  {
+    code: 'const { data, error } = await supabase\n  .from("projects")\n  .select("*")\n  .eq("enabled", true)\n  .order("sort_order", { ascending: true })',
+    tags: ['TypeScript'],
+  },
 ]
+
+const TAG_COLORS: Record<string, string> = {
+  'C#': 'rgba(180,120,220,1)',
+  '.NET': 'rgba(160,80,200,1)',
+  'ASP.NET': 'rgba(160,80,200,1)',
+  'Vue 3': 'rgba(66,184,131,1)',
+  TypeScript: 'rgba(70,150,230,1)',
+  'MS SQL': 'rgba(240,80,70,1)',
+  'API Design': 'rgba(250,210,50,1)',
+  Docker: 'rgba(60,170,250,1)',
+  Git: 'rgba(250,100,70,1)',
+  Scrum: 'rgba(50,210,230,1)',
+  Flutter: 'rgba(90,185,255,1)',
+  'System Integration': 'rgba(180,100,220,1)',
+}
 
 const sectionRef = ref<HTMLElement | null>(null)
 const contentLayerRef = ref<HTMLElement | null>(null)
@@ -90,6 +146,7 @@ function tick() {
     }
   }
 
+  tickTypewriters()
   rafId = requestAnimationFrame(tick)
 }
 
@@ -100,9 +157,42 @@ interface CodeBlock {
   rotate: string
   opacity: number
   fontSize: string
+  snippetIdx: number
+  isTypewriter: boolean
 }
 
 const codeBlocks = ref<CodeBlock[]>([])
+
+const TYPEWRITER_INDICES = [1, 6] 
+const TYPEWRITER_SPEED = 45 
+interface TypewriterState {
+  fullText: string
+  charIndex: number
+  lastTick: number
+  paused: number 
+}
+const typewriters = ref<Map<number, TypewriterState>>(new Map())
+
+function tickTypewriters() {
+  const now = performance.now()
+  for (const [blockIdx, tw] of typewriters.value) {
+    if (tw.paused > 0) {
+      tw.paused -= 16
+      continue
+    }
+    if (now - tw.lastTick < TYPEWRITER_SPEED) continue
+    tw.lastTick = now
+    tw.charIndex++
+    if (tw.charIndex > tw.fullText.length) {
+      tw.paused = 2000
+      tw.charIndex = 0
+    }
+    const block = codeBlocks.value[blockIdx]
+    if (block) {
+      block.text = tw.fullText.slice(0, tw.charIndex)
+    }
+  }
+}
 
 function generateCodeBlocks() {
   const blocks: CodeBlock[] = []
@@ -114,20 +204,50 @@ function generateCodeBlocks() {
   let snippetIdx = 0
   for (let r = 0; r < rows; r++) {
     for (let c = 0; c < cols; c++) {
+      const blockIndex = r * cols + c
+      const idx = snippetIdx % SNIPPET_DEFS.length
+      const isTypewriter = TYPEWRITER_INDICES.includes(blockIndex)
       const jitterX = (Math.random() - 0.5) * cellW * 0.5
       const jitterY = (Math.random() - 0.5) * cellH * 0.4
       blocks.push({
-        text: CODE_SNIPPETS[snippetIdx % CODE_SNIPPETS.length],
+        text: isTypewriter ? '' : SNIPPET_DEFS[idx].code,
         top: `${r * cellH + cellH / 2 + jitterY}%`,
         left: `${c * cellW + cellW / 2 + jitterX}%`,
         rotate: `${(Math.random() - 0.5) * 12}deg`,
         opacity: 0.25 + Math.random() * 0.2,
         fontSize: `${0.55 + Math.random() * 0.2}rem`,
+        snippetIdx: idx,
+        isTypewriter,
       })
+      if (isTypewriter) {
+        typewriters.value.set(blockIndex, {
+          fullText: SNIPPET_DEFS[idx].code,
+          charIndex: 0,
+          lastTick: performance.now(),
+          paused: 0,
+        })
+      }
       snippetIdx++
     }
   }
   codeBlocks.value = blocks
+}
+
+const hoveredTag = ref<string | null>(null)
+
+function onTagEnter(tag: string) {
+  hoveredTag.value = tag
+}
+
+function onTagLeave() {
+  hoveredTag.value = null
+}
+
+function blockHighlightColor(block: CodeBlock): string | null {
+  if (!hoveredTag.value) return null
+  const def = SNIPPET_DEFS[block.snippetIdx]
+  if (!def || !def.tags.includes(hoveredTag.value)) return null
+  return TAG_COLORS[hoveredTag.value] ?? null
 }
 
 onMounted(() => {
@@ -152,26 +272,36 @@ onBeforeUnmount(() => {
     class="hero-section relative flex min-h-screen items-center justify-center overflow-hidden"
   >
     <div class="absolute inset-0 z-0 bg-[#0d1117] dark:bg-black" aria-hidden="true">
-      <div
-        v-for="(block, i) in codeBlocks"
-        :key="i"
-        class="code-block pointer-events-none absolute -translate-x-1/2 -translate-y-1/2 whitespace-pre font-mono leading-snug select-none text-[rgba(0,140,255,0.5)] dark:text-[rgba(0,255,120,0.7)]"
-        :style="{
-          top: block.top,
-          left: block.left,
-          transform: `translate(-50%, -50%) rotate(${block.rotate})`,
-          opacity: block.opacity,
-          fontSize: block.fontSize,
-        }"
-      >{{ block.text }}</div>
+      <div class="scanline-overlay absolute inset-0" />
     </div>
+
+    <div
+      v-for="(block, i) in codeBlocks"
+      :key="i"
+      class="code-block pointer-events-none absolute -translate-x-1/2 -translate-y-1/2 whitespace-pre font-mono leading-snug select-none"
+      :class="[
+        block.isTypewriter ? 'typewriter-block' : '',
+        blockHighlightColor(block) ? 'z-[15]' : 'z-0',
+      ]"
+      :style="{
+        top: block.top,
+        left: block.left,
+        transform: `translate(-50%, -50%) rotate(${block.rotate})`,
+        opacity: blockHighlightColor(block) ? Math.min(block.opacity * 3, 1) : block.opacity,
+        fontSize: block.fontSize,
+        color: blockHighlightColor(block) ?? undefined,
+        textShadow: blockHighlightColor(block) ? `0 0 20px ${blockHighlightColor(block)}, 0 0 8px ${blockHighlightColor(block)}, 0 0 2px ${blockHighlightColor(block)}` : undefined,
+        animation: blockHighlightColor(block) ? 'star-pulse 1.6s ease-in-out infinite' : undefined,
+        transition: 'color 0.4s ease, opacity 0.4s ease, text-shadow 0.4s ease, z-index 0s',
+      }"
+      aria-hidden="true"
+    >{{ block.text }}<span v-if="block.isTypewriter" class="typewriter-cursor">|</span></div>
 
     <div
       ref="contentLayerRef"
       class="hero-content-layer pointer-events-none absolute inset-0 z-10"
     >
       <div class="absolute inset-0 bg-background" />
-
       <div
         class="absolute inset-0 bg-[linear-gradient(to_right,var(--color-border)_1px,transparent_1px),linear-gradient(to_bottom,var(--color-border)_1px,transparent_1px)] bg-size-[4rem_4rem] opacity-30"
       />
@@ -215,7 +345,14 @@ onBeforeUnmount(() => {
       </div>
 
       <div class="mt-12 flex flex-wrap items-center justify-center gap-2">
-        <AppTag v-for="tag in heroTags" :key="tag" variant="outline">
+        <AppTag
+          v-for="tag in heroTags"
+          :key="tag"
+          variant="outline"
+          class="cursor-default"
+          @mouseenter="onTagEnter(tag)"
+          @mouseleave="onTagLeave"
+        >
           {{ tag }}
         </AppTag>
       </div>
@@ -245,5 +382,47 @@ onBeforeUnmount(() => {
 .code-block {
   max-width: 340px;
   line-height: 1.4;
+  color: rgba(0, 140, 255, 0.5);
+}
+
+:is(.dark) .code-block {
+  color: rgba(0, 255, 120, 0.7);
+}
+
+.typewriter-cursor {
+  animation: blink-cursor 0.8s step-end infinite;
+  font-weight: bold;
+}
+
+@keyframes blink-cursor {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+.scanline-overlay {
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0px,
+      transparent 2px,
+      rgba(255, 255, 255, 0.015) 2px,
+      rgba(255, 255, 255, 0.015) 4px
+    );
+  z-index: 1;
+}
+
+@keyframes star-pulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 6px currentColor) brightness(1);
+  }
+  50% {
+    filter: drop-shadow(0 0 18px currentColor) brightness(1.3);
+  }
 }
 </style>
